@@ -1,0 +1,44 @@
+<h1>Productos: </h1>
+
+{{#if products.docs.length}}
+  <div>
+      {{#each products.docs}}
+        <div style="border: 1px solid #000; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem">
+          <p> Title: {{this.title}} </p>
+          <p> Description: {{this.description}} </p>
+          <p> Price: {{this.price}} </p>
+          <button id={{this._id}} onclick="addProductToCart(this)">Agregar al carrito</button>
+        </div>
+      {{/each}}
+  </div>
+  <br/>
+
+  <div>
+      {{#if products.hasPrevPage}}
+          <a href={{products.prevLink}}><<</a>
+      {{/if}}
+      {{#if products.hasNextPage}}
+          <a href={{products.nextLink}}>>></a>
+      {{/if}} 
+  </div>
+{{else}}
+  <h1>No hay productos</h1>
+{{/if}}
+
+<script>
+  async function addProductToCart(button) {
+    let productId = button.id
+
+    // IMPORTANTE: El carrito al que se agrega el producto esta hardcodeado, pues no se especificaba
+    // en la consigna a que carrito agregar los productos (en este caso se agregan los productos
+    // al carrito de id: 648fdf6a9887ffaaadcc9fc6)
+    try {     
+      const response = await fetch('http://localhost:8080/api/carts/648fdf6a9887ffaaadcc9fc6/product/' + productId, {
+        method: 'post'
+      });
+    } 
+    catch(err) {
+      console.error(`Error: ${err}`);
+    }
+  }
+</script>

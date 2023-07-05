@@ -1,0 +1,72 @@
+[
+	{
+		"title": "galleta",
+		"description": "galletas dulces",
+		"code": 10,
+		"price": 15,
+		"status": "true",
+		"stock": 300,
+		"category": "Comida",
+		"thumbnail": [
+			"imagen.com/asdfg",
+			"imagen.ar/qwert"
+		],
+		"id": "d40815c1-3d4f-4d72-9f0c-89f1885eb355"
+	},
+	{
+		"title": "Gaceosa",
+		"description": "Gaceosa de cola",
+		"code": 9,
+		"price": 60,
+		"status": "true",
+		"stock": 500,
+		"category": "Bebida",
+		"thumbnail": [
+			"imagen.com/asdfg",
+			"imagen.ar/qwert"
+		],
+		"id": "f7bfa7ff-d96f-4c86-99b0-3a9c39c50653"
+	},
+	{
+		"title": "Agua",
+		"description": "Botellas de agua",
+		"code": 8,
+		"price": 20,
+		"status": "true",
+		"stock": 450,
+		"category": "Bebida",
+		"thumbnail": [
+			"imagen.com/asdfg",
+			"imagen.ar/qwert"
+		],
+		"id": "033f517e-2b33-48fa-9696-0b1048e4d83a"
+	},
+	{
+		"title": "Milanesas",
+		"description": "Milanesas de pollo congeladas",
+		"code": 7,
+		"price": 30,
+		"status": "true",
+		"stock": 450,
+		"category": "Comida",
+		"thumbnail": [
+			"imagen.com/asdfg",
+			"imagen.ar/qwert"
+		],
+		"id": "c0075d5c-16ef-482e-88bc-f7249bb4e4f8"
+	},
+	{
+		"title": "Pan",
+		"description": "Tiras de pan",
+		"code": 6,
+		"price": 10,
+		"status": "true",
+		"stock": 600,
+		"category": "Comida",
+		"thumbnail": [
+			"imagen.com/asdfg",
+			"imagen.ar/qwert"
+		],
+		"id": "e73b38f7-9d5b-4c59-96e1-992054b616c5"
+	}
+]
