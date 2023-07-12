@@ -12,6 +12,9 @@ import { Server } from "socket.io";
 import ProductManager from './daos/mongodb/ProductManager.class.js'
 import MessageManager from './daos/mongodb/MessageManager.class.js'
 
+import MongoStore from 'connect-mongo'
+import session from 'express-session'
+
 // initial configuration
 
 const app = express();
@@ -28,6 +31,17 @@ app.use(express.static(__dirname + "/public"));
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
+
+// session
+
+app.use(
+  session({
+    store: new MongoStore({ mongoUrl: "mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority" }),
+    secret: "mongoSecret",
+    resave: true,
+    saveUninitialized: false,
+  })
+);
 
 // server start and socket io
 
@@ -82,6 +96,8 @@ app.use((req, res, next) => {
 // routers
 
 app.use("/", routerViews);
+
 app.use("/api/messages", routerMessages);
 app.use("/api/products", routerProducts);
 app.use("/api/carts", routerCarts);
+app.use('/api/sessions', routerSession)
