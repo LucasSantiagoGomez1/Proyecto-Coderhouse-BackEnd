@@ -7,13 +7,18 @@ import routerProducts from './routes/products.router.js'
 import routerCarts from './routes/carts.router.js'
 import routerMessages from './routes/messages.router.js'
 import routerViews from './routes/views.router.js'
+import routerSession from './routes/session.router.js'
 
 import { Server } from "socket.io";
+
 import ProductManager from './daos/mongodb/ProductManager.class.js'
 import MessageManager from './daos/mongodb/MessageManager.class.js'
 
 import MongoStore from 'connect-mongo'
 import session from 'express-session'
+
+import passport from 'passport'
+import initializePassport from './config/passport.config.js'
 
 // initial configuration
 
@@ -42,6 +47,12 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+// passport
+
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 // server start and socket io
 
