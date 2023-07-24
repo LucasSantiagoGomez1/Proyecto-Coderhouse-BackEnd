@@ -17,8 +17,12 @@ import MessageManager from './daos/mongodb/MessageManager.class.js'
 import MongoStore from 'connect-mongo'
 import session from 'express-session'
 
+import cookieParser from 'cookie-parser'
+
 import passport from 'passport'
-import initializePassport from './config/passport.config.js'
+import initializePassportGithub from './config/github.passport.js'
+import initializePassportLocal from './config/local.passport.js'
+import { initializePassportJWT } from './config/jwt.passport.js'
 
 // initial configuration
 
@@ -37,6 +41,10 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
+// cookies
+
+app.use(cookieParser())
+
 // session
 
 app.use(
@@ -50,9 +58,10 @@ app.use(
 
 // passport
 
-initializePassport()
+initializePassportGithub()
+initializePassportLocal()
+initializePassportJWT()
 app.use(passport.initialize())
-app.use(passport.session())
 
 // server start and socket io
 

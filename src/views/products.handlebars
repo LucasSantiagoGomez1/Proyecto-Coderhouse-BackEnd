@@ -1,3 +1,11 @@
+<div>
+    <h2>Bienvenido, {{user.name}}</h2>
+    <p>Mail: {{user.email}}</p>
+    <p>Rol:  {{user.role}} </p>
+    <p id="cart-id">Id del Carrito: {{user.cart}} </p>
+    <button id="logout-btn">Logout</button>
+</div>
+
 <h1>Productos: </h1>
 
 {{#if products.docs.length}}
@@ -28,12 +36,12 @@
 <script>
   async function addProductToCart(button) {
     let productId = button.id
+    let cartId = document.getElementById("cart-id").innerText.split(" ")[3] // TODO: Es muy feo, cambiar
 
-    // IMPORTANTE: El carrito al que se agrega el producto esta hardcodeado, pues no se especificaba
-    // en la consigna a que carrito agregar los productos (en este caso se agregan los productos
-    // al carrito de id: 648fdf6a9887ffaaadcc9fc6)
     try {     
-      const response = await fetch('http://localhost:8080/api/carts/648fdf6a9887ffaaadcc9fc6/product/' + productId, {
+      let url = "http://localhost:8080/api/carts/"+ cartId + "/product/" + productId
+
+      const response = await fetch(url, {
         method: 'post'
       });
     } 
@@ -41,4 +49,15 @@
       console.error(`Error: ${err}`);
     }
   }
+</script>
+
+<script>
+  let logoutButton = document.getElementById("logout-btn")
+
+  logoutButton.addEventListener("click", (evt) => {
+    fetch('http://localhost:8080/api/sessions/logout', {method: 'post'})
+    .then( res => {
+      return window.location.replace('/login')
+    })
+  })
 </script>
