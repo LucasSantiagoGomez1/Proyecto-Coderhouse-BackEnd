@@ -3,6 +3,8 @@ import handlebars from 'express-handlebars'
 
 import __dirname from './utils.js'
 
+import config from './config.js'
+
 import routerProducts from './routes/products.router.js' 
 import routerCarts from './routes/carts.router.js'
 import routerMessages from './routes/messages.router.js'
@@ -11,8 +13,8 @@ import routerSession from './routes/session.router.js'
 
 import { Server } from "socket.io";
 
-import ProductManager from './daos/mongodb/ProductManager.class.js'
-import MessageManager from './daos/mongodb/MessageManager.class.js'
+import ProductManager from './daos/mongodb/managers/ProductManager.class.js'
+import MessageManager from './daos/mongodb/managers/MessageManager.class.js'
 
 import MongoStore from 'connect-mongo'
 import session from 'express-session'
@@ -65,7 +67,7 @@ app.use(passport.initialize())
 
 // server start and socket io
 
-const expressServer = app.listen(8080, () => console.log("Servidor levantado"))
+const expressServer = app.listen(config.PORT, () => console.log("Servidor levantado"))
 const socketServer = new Server(expressServer)
 
 socketServer.on("connection", async (socket) => {
@@ -76,18 +78,23 @@ socketServer.on("connection", async (socket) => {
   let productManager = new ProductManager()
 
   // Se envian todos los productos al conectarse
-  socket.emit("update-products", await productManager.getProducts())
+  let products = await productManager.getProducts()
+  socket.emit("update-products", products.docs)
 
   // Se agrega el producto y se vuelven a renderizar para todos los sockets conectados
   socket.on("add-product", async (productData) => {
     await productManager.addProduct(productData)
-    socketServer.emit("update-products", await productManager.getProducts())
+    
+    products = await productManager.getProducts()
+    socketServer.emit("update-products", products.docs)
   })
 
   // Se elimina el producto y se vuelven a renderizar para todos los sockets conectados
   socket.on("delete-product", async (productID) => {
     await productManager.deleteProduct(productID)
-    socketServer.emit("update-products", await productManager.getProducts())
+    
+    products = await productManager.getProducts()
+    socketServer.emit("update-products", products.docs)
   })
 
   //////////////// MENSAJES ////////////////

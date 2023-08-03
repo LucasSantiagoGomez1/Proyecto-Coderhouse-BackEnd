@@ -1,7 +1,8 @@
 import passport from "passport";
 import GithubStrategy from 'passport-github2'
+import config from "../config.js";
 
-import UserManager from "../daos/mongodb/UserManager.class.js";
+import UserManager from "../daos/mongodb/managers/UserManager.class.js";
 
 const userManager = new UserManager()
 
@@ -13,8 +14,8 @@ const initializePassportGithub = () => {
     "github",
     new GithubStrategy(
       {
-        clientID: "Iv1.823ba34d6adb9982",
-        clientSecret: "a773f57af117d7b576dabde84df9814389affb1d",
+        clientID: config.GITHUB_CLIENT_ID,
+        clientSecret: config.GITHUB_CLIENT_SECRET,
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
       },
       async (accessToken, refreshToken, profile, done) => {

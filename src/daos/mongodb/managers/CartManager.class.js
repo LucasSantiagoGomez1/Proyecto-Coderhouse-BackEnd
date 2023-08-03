@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { cartsModel } from "./models/carts.model.js";
+import { cartsModel } from "../models/carts.model.js";
 import ProductManager from "./ProductManager.class.js";
 
 export default class CartManager {
@@ -91,5 +91,4 @@ export default class CartManager {
     return cart.products
   }
   
-
 }

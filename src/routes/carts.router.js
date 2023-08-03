@@ -1,89 +1,23 @@
 import { Router } from "express";
-import CartManager from "../daos/mongodb/CartManager.class.js";
 import __dirname from "../utils.js";
-
-let cartManager = new CartManager()
+import cartsController from "../controllers/carts.controller.js";
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-  let carts = await cartManager.getCarts()
+router.get('/', cartsController.getCarts)
 
-  res.send(carts)
-})
+router.get('/:cid', cartsController.getCartById)
 
-router.get('/:cid', async (req, res) => {
-  let id = req.params.cid
+router.post('/', cartsController.createCart)
 
-  let cart = await cartManager.getCartById(id)
+router.post('/:cid/product/:pid', cartsController.addProductToCart)
 
-  if (!cart) {
-    res.send("No se encontró el carrito")
-    return
-  }
+router.delete('/:cid/products/:pid', cartsController.deleteProductFromCart)
 
-  res.send(cart.products)
-})
+router.delete('/:cid', cartsController.deleteAllProductsFromCart)
 
-router.post('/', async (req, res) => {
-  await cartManager.createCart()
+router.put('/:cid', cartsController.replaceProductsFromCart)
 
-  res.send({status: "success"})
-})
-
-router.post('/:cid/product/:pid', async (req, res) => {
-  try {
-    let cartId = req.params.cid
-    let productId = req.params.pid
-
-    await cartManager.addProductToCart(cartId, productId)
-
-    res.send({status: "success"})
-  }
-  catch(error) {
-    res.status(400).send({status: "failure", details: error.message})
-  }
-})
-
-router.delete('/:cid/product/:pid', async (req, res) => {
-  try {
-    let cartId = req.params.cid
-    let productId = req.params.pid
-
-    await cartManager.deleteProductFromCart(cartId, productId)
-
-    res.send({status: "success"})
-  }
-  catch(error) {
-    res.status(400).send({status: "failure", details: error.message})
-  }
-})
-
-router.delete('/:cid', async (req, res) => {
-  let cartId = req.params.cid
-
-  await cartManager.deleteAllProductsFromCart(cartId)
-
-  res.send({status: "success"})
-})
-
-router.put('/:cid', async (req, res) => {
-  let cartId = req.params.cid
-  let newProducts = req.body
-
-  await cartManager.replaceProductsFromCart(cartId, newProducts)
-
-  res.send({status: "success"})
-})
-
-router.put('/:cid/products/:pid', async (req, res) => {
-  let cartId = req.params.cid
-  let productId = req.params.pid
-  let newQuantity = req.body.quantity
-
-  await cartManager.updateProductQuantityFromCart(cartId, productId, newQuantity)
-
-  res.send({status: "success"})
-})
+router.put('/:cid/products/:pid', cartsController.updateProductQuantityFromCart)
 
 export default router
