@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { cartsModel } from "../models/carts.model.js";
-import ProductManager from "./ProductManager.class.js";
 
 export default class CartManager {
   connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority')
@@ -22,19 +21,17 @@ export default class CartManager {
     return result
   }
 
-  async addProductToCart(cid, pid) {
+  async addProductToCart(cid, newProduct) {
     try {
       const cart = await this.getCartById(cid)
 
-      let product = cart.products.find((prod) => prod.product._id.toString() === pid ) // Es el producto, si existe
+      let product = cart.products.find((prod) => prod.product._id.toString() === newProduct._id.toString() ) // Es el producto, si existe
 
       if (!product) {
-        let newProduct = await this.productManager.getProductById(pid)
-
         cart.products.push({ product: newProduct, quantity: 1 })
       }
       else {
-        product.quantity += 1 // Como el producto ya existe, solo incremento su cantidad en 1
+        product.quantity += 1
       }
       
       await cart.save()
@@ -90,5 +87,5 @@ export default class CartManager {
 
     return cart.products
   }
-  
+
 }

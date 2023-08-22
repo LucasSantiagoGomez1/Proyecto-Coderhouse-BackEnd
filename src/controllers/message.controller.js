@@ -1,9 +1,9 @@
-import MessageManager from "../daos/mongodb/managers/MessageManager.class.js";
+import MessageService from "../services/messages.service.js";
 
-let messageManager = new MessageManager()
+let messageService = new MessageService()
 
 const getMessages = async (req, res) => {
-  let messages = await messageManager.getMessages()
+  let messages = await messageService.getMessages()
 
   res.send(messages)
 }
@@ -11,8 +11,8 @@ const getMessages = async (req, res) => {
 const addMessage = async (req, res) => {
   let newMessage = req.body
 
-  await messageManager.addMessage(newMessage)
-  req.socketServer.emit("update-messages", await messageManager.getMessages())
+  await messageService.addMessage(newMessage)
+  req.socketServer.emit("update-messages", await messageService.getMessages())
 
   res.send({status: "success"})
 }

@@ -1,20 +1,13 @@
 import mongoose from "mongoose";
 import { userModel } from "../models/users.model.js";
 
-import CartManager from "./CartManager.class.js";
-
 export default class UserManager {
   connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority')
 
-  cartManager = new CartManager()
-  
-  async addUser(user) {
+  async addUser(user, cart) {
     try {
+      user.cart = cart._id
 
-      let newCart = await this.cartManager.createCart()
-
-      user.cart = newCart._id
-      
       let result = await userModel.create(user)
 
       return result
@@ -45,5 +38,5 @@ export default class UserManager {
 
     await userModel.updateOne({_id: user._id}, {$set: {password: newPassword}});
   }
-
+  
 }

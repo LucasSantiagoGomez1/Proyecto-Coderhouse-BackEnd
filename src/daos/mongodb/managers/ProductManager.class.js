@@ -14,16 +14,29 @@ export default class ProductManager {
     }
   }
 
-  async getProducts(limit = 10, page = 1, sort = 0, filtro = null, filtroVal = null) {
-    let whereOptions = {}
-    if(filtro != "" && filtroVal != ""){
-      whereOptions = {[filtro] : filtroVal }
+  async getProducts(limit = 10, page = 1, sort = 0, filter = null, filterValue = null) {
+    limit = Number(limit)
+    page = Number(page)
+    sort = Number(sort)
+    let options;
+
+    let filterToApply = {}
+    if (filter && filterValue) {
+      filterToApply = {[filter]: filterValue}
     }
-    let result = await productsModel.paginate(whereOptions, {
-        limit: limit, 
-        page: page, 
-        sort: {price: sort}}
-      )
+
+    if (!sort) {
+      options = { limit: limit, page: page, lean: true }
+    }
+    else {
+      options = { limit: limit, page: page, sort: { price: sort, _id: -1 }, lean: true }
+    }
+
+    let result = await productsModel.paginate(
+      filterToApply,
+      options
+    )
+
     return result
   }
 
@@ -41,4 +54,5 @@ export default class ProductManager {
     let result = await productsModel.deleteOne({ _id: id })
     return result
   }
+  
 }

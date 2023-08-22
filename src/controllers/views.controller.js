@@ -1,11 +1,9 @@
-import ProductManager from '../daos/mongodb/managers/ProductManager.class.js';
-import CartManager from '../daos/mongodb/managers/CartManager.class.js'
+import ViewService from "../services/views.service.js";
 
-let productManager = new ProductManager()
-let cartManager = new CartManager()
+let viewService = new ViewService()
 
 const home = async (req, res) => {
-  let products = await productManager.getProducts();
+  let products = await viewService.getProducts();
 
   res.render('home', {
     title: "Inicio",
@@ -32,7 +30,7 @@ const products = async (req, res) => {
   let page = req.query.page
   let sort = req.query.sort
 
-  let products = await productManager.getProducts(limit, page, sort); 
+  let products = await viewService.getProducts(limit, page, sort); 
 
   products.prevLink = products.hasPrevPage ? `http://localhost:8080/products?page=${products.prevPage}&limit=${limit}&sort=${sort}` : '';
   products.nextLink = products.hasNextPage ? `http://localhost:8080/products?page=${products.nextPage}&limit=${limit}&sort=${sort}` : '';
@@ -47,7 +45,7 @@ const products = async (req, res) => {
 const cart = async (req, res) => {
   let cartId = req.params.cid
 
-  let cartProducts = await cartManager.getAllProductsFromCart(cartId)
+  let cartProducts = await viewService.getAllProductsFromCart(cartId)
 
   res.render('cart', {
     title: "Cart",

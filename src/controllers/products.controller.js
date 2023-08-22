@@ -1,16 +1,16 @@
-import ProductManager from '../daos/mongodb/managers/ProductManager.class.js'
+import ProductService from '../services/products.service.js'
 
-let productManager = new ProductManager()
+let productService = new ProductService
 
 const getProducts = async (req, res) => {
   try {
     let limit = req.query.limit
     let page = req.query.page
-    let sort = req.query.sort 
+    let sort = req.query.sort
     let filter = req.query.filter
     let filterValue = req.query.filterValue
 
-    let products = await productManager.getProducts(limit, page, sort, filter, filterValue)
+    let products = await productService.getProducts(limit, page, sort, filter, filterValue)
 
     let response = {
       status: "success",
@@ -35,7 +35,7 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   let id = req.params.pid
 
-  let product = await productManager.getProductById(id)
+  let product = await productService.getProductById(id)
 
   if (!product) {
     res.send("No se encontró el producto")
@@ -49,9 +49,9 @@ const addProduct = async (req, res) => {
   try {
     let newProduct = req.body
 
-    await productManager.addProduct(newProduct)
+    await productService.addProduct(newProduct)
     
-    const products = await productManager.getProducts()
+    const products = await productService.getProducts()
     req.socketServer.sockets.emit('update-products', products)
   
     res.send({status: "success"})
@@ -65,7 +65,7 @@ const updateProduct = async (req, res) => {
   let id = req.params.pid
   let newProduct = req.body
 
-  await productManager.updateProduct(id, newProduct)
+  await productService.updateProduct(id, newProduct)
 
   res.send({status: "success"})
 }
@@ -73,9 +73,9 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   let id = req.params.pid
   
-  await productManager.deleteProduct(id)
+  await productService.deleteProduct(id)
 
-  const products = await productManager.getProducts()
+  const products = await productService.getProducts()
   req.socketServer.sockets.emit('update-products', products)
 
   res.send({status: "success"})

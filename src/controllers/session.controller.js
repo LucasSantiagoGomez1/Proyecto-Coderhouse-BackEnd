@@ -1,9 +1,10 @@
-import UserManager from "../daos/mongodb/managers/UserManager.class.js";
 import { createHash } from "../utils.js";
 import jwt from "jsonwebtoken";
 import config from "../config.js";
+import UserService from "../services/user.service.js";
+import CurrentUserDTO from "./DTO/user.dto.js";
 
-const userManager = new UserManager()
+const userService = new UserService()
 
 const register = async (req, res) => {
   res.send({ status: "success", message: "User has been created"});
@@ -20,7 +21,7 @@ const login = async (req, res) => {
     return res.status(400).send({status: "error", details: "Invalid credentials"})
   }
 
-  let token = jwt.sign(req.user, 'coderSecret', {expiresIn: '24h'})
+  let token = jwt.sign(req.user, config.JWT_SECRET, {expiresIn: '24h'})
 
   return res.cookie("authToken", token, {httpOnly: true}).send({status: "success"})
 }
@@ -44,7 +45,7 @@ const resetPassword = async (req, res) => {
   try {
     const newHashedPassword = createHash(password);
 
-    await userManager.updatePassword(email, newHashedPassword)
+    await userService.updatePassword(email, newHashedPassword)
 
     return res.send({status: "success", message: "Password updated"});
   }
@@ -54,8 +55,7 @@ const resetPassword = async (req, res) => {
 }
 
 const github = async (req, res) => {
-
-
+  
 }
 
 const githubcallback = async (req, res) => {
@@ -74,7 +74,9 @@ const githubcallback = async (req, res) => {
 }
 
 const current = async (req, res) => {
-  res.send(req.user);
+  let userDto = new CurrentUserDTO(req.user)
+
+  res.send(userDto);
 }
 
 export default {

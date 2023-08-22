@@ -17,7 +17,7 @@ export default class CartManager {
 
     return carts
   }
-  
+
   async createCart() {
     let carts = await this.#loadCartsFromPath()
 

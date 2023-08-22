@@ -1,9 +1,12 @@
-import CartManager from "../daos/mongodb/managers/CartManager.class.js";
+import CartService from "../services/cart.service.js";
+import TicketService from "../services/ticket.service.js"
+import { v4 as uuidV4 } from "uuid"
 
-let cartManager = new CartManager()
+let cartService = new CartService()
+let ticketService = new TicketService()
 
 const getCarts = async (req, res) => {
-  let carts = await cartManager.getCarts()
+  let carts = await cartService.getCarts()
 
   res.send(carts)
 }
@@ -11,7 +14,7 @@ const getCarts = async (req, res) => {
 const getCartById = async (req, res) => {
   let id = req.params.cid
 
-  let cart = await cartManager.getCartById(id)
+  let cart = await cartService.getCartById(id)
 
   if (!cart) {
     res.send("No se encontró el carrito")
@@ -22,7 +25,7 @@ const getCartById = async (req, res) => {
 }
 
 const createCart = async (req, res) => {
-  await cartManager.createCart()
+  await cartService.createCart()
 
   res.send({status: "success"})
 }
@@ -32,7 +35,7 @@ const addProductToCart = async (req, res) => {
     let cartId = req.params.cid
     let productId = req.params.pid
 
-    await cartManager.addProductToCart(cartId, productId)
+    await cartService.addProductToCart(cartId, productId)
 
     res.send({status: "success"})
   }
@@ -46,7 +49,7 @@ const deleteProductFromCart = async (req, res) => {
     let cartId = req.params.cid
     let productId = req.params.pid
 
-    await cartManager.deleteProductFromCart(cartId, productId)
+    await cartService.deleteProductFromCart(cartId, productId)
 
     res.send({status: "success"})
   }
@@ -58,7 +61,7 @@ const deleteProductFromCart = async (req, res) => {
 const deleteAllProductsFromCart = async (req, res) => {
   let cartId = req.params.cid
 
-  await cartManager.deleteAllProductsFromCart(cartId)
+  await cartService.deleteAllProductsFromCart(cartId)
 
   res.send({status: "success"})
 }
@@ -67,7 +70,7 @@ const replaceProductsFromCart = async (req, res) => {
   let cartId = req.params.cid
   let newProducts = req.body
 
-  await cartManager.replaceProductsFromCart(cartId, newProducts)
+  await cartService.replaceProductsFromCart(cartId, newProducts)
 
   res.send({status: "success"})
 }
@@ -77,9 +80,33 @@ const updateProductQuantityFromCart = async (req, res) => {
   let productId = req.params.pid
   let newQuantity = req.body.quantity
 
-  await cartManager.updateProductQuantityFromCart(cartId, productId, newQuantity)
+  await cartService.updateProductQuantityFromCart(cartId, productId, newQuantity)
 
   res.send({status: "success"})
+}
+
+const purchaseProductsFromCart = async (req, res) => {
+  let code = uuidV4()
+
+  let purchaseData = await cartService.purchaseAllProductsFromCart(req.user.cart)
+
+  await cartService.deleteProductsFromCart(req.user.cart, purchaseData.productsBought) 
+
+  let ticketData = {
+    code: code,
+    products: purchaseData.productsBought,
+    amount: purchaseData.total,
+    purchaser: req.user.email
+  }
+
+  let ticket = await ticketService.createTicket(ticketData)
+
+  let payload = {
+    ticket,
+    productsUnableToPurchase: purchaseData.productsNotBought
+  }
+
+  res.send({status: "success", payload: payload})
 }
 
 export default {
@@ -90,5 +117,6 @@ export default {
   deleteProductFromCart,
   deleteAllProductsFromCart,
   replaceProductsFromCart,
-  updateProductQuantityFromCart
+  updateProductQuantityFromCart,
+  purchaseProductsFromCart
 }
