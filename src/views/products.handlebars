@@ -36,7 +36,7 @@
 <script>
   async function addProductToCart(button) {
     let productId = button.id
-    let cartId = document.getElementById("cart-id").innerText.split(" ")[3] // TODO: Es muy feo, cambiar
+    let cartId = document.getElementById("cart-id").innerText.split(" ")[3]
 
     try {     
       let url = "http://localhost:8080/api/carts/"+ cartId + "/product/" + productId

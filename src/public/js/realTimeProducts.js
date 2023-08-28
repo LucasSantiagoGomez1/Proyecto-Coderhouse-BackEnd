@@ -2,8 +2,6 @@ const socket = io();
 
 let addProductBtn = document.getElementById("add-product-btn")
 
-// Socket.on
-
 socket.on("update-products", (products) => {
   let productsContainer = document.getElementById("products-container")
   productsContainer.innerHTML = ""
@@ -23,12 +21,8 @@ socket.on("update-products", (products) => {
 
 })
 
-// Event listeners
-
 addProductBtn.addEventListener("click", (e) => {
   e.preventDefault()
-
-  // Obtenemos los inputs
 
   let titleInput = document.getElementById("title")
   let descriptionInput = document.getElementById("description")
@@ -37,8 +31,6 @@ addProductBtn.addEventListener("click", (e) => {
   let stockInput = document.getElementById("stock")
   let categoryInput = document.getElementById("category")
   let statusInput = document.getElementById("status")
-
-  // Creamos la "data" del producto a partir de los valores de los inputs, y la enviamos
 
   let productData = {
     title: titleInput.value,
@@ -52,8 +44,6 @@ addProductBtn.addEventListener("click", (e) => {
 
   socket.emit("add-product", productData)
 
-  // "Limpiamos" los inputs
-
   titleInput.value = ""
   descriptionInput.value = ""
   priceInput.value = ""
@@ -64,8 +54,6 @@ addProductBtn.addEventListener("click", (e) => {
 
 })
 
-// Declaracion de funciones auxiliares
-
 function deleteProduct(button) {
-  socket.emit("delete-product", button.id) // El id del boton es del producto
+  socket.emit("delete-product", button.id)
 }

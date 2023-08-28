@@ -30,7 +30,7 @@ const createCart = async (req, res) => {
   res.send({status: "success"})
 }
 
-const addProductToCart = async (req, res) => {
+const addProductToCart = async (req, res, next) => {
   try {
     let cartId = req.params.cid
     let productId = req.params.pid
@@ -40,7 +40,7 @@ const addProductToCart = async (req, res) => {
     res.send({status: "success"})
   }
   catch(error) {
-    res.status(400).send({status: "failure", details: error.message})
+    return next(error)
   }
 }
 

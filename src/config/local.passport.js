@@ -10,7 +10,6 @@ const userService = new UserService()
 
 const initializePassportLocal = () => {
 
-  // Strategies
 
   passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     if (email === config.ADMIN_NAME && password === config.ADMIN_PASSWORD) {

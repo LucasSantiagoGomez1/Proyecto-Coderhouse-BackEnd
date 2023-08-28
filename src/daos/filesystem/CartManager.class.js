@@ -19,6 +19,7 @@ export default class CartManager {
   }
 
   async createCart() {
+    
     let carts = await this.#loadCartsFromPath()
 
     carts.push({id: uuidV4(), products: []})
@@ -33,12 +34,12 @@ export default class CartManager {
   }
 
   async addProductToCart(cid, pid) {
-    // cid es el id del carrito, pid es el id del producto
+
     let carts = await this.#loadCartsFromPath()
 
-    let cart = carts.find((cart) => cart.id === cid) // Es el carrito al que le voy a agregar el producto
+    let cart = carts.find((cart) => cart.id === cid)
 
-    let product = cart.products.find((prod) => prod.product === pid ) // Es el producto, si existe
+    let product = cart.products.find((prod) => prod.product === pid )
 
     if (!product) {
       product = {product: pid, quantity: 1}
@@ -46,7 +47,7 @@ export default class CartManager {
       cart.products.push(product)
     }
     else {
-      product.quantity += 1 // Como el producto ya existe, solo incremento su cantidad en 1
+      product.quantity += 1
     }
 
     await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'))

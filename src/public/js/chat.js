@@ -5,23 +5,19 @@ let messageInput = document.getElementById("message-input")
 
 let user = ""
 
-// Identificacion de usuario
-
 Swal.fire({
   title: "Identifícate con tu email",
   input: "email",
   inputValidator: (value) => {
     if (!value) {
-      return "Necesitas escribir un email para identificarte" // Devuelvo el mensaje de error
+      return "Necesitas escribir un email para identificarte"
     }
-    return false // Se identifico con exito
+    return false
   },
   allowOutsideClick: false,
 }).then((result) => {
   user = result.value;
 });
-
-// Socket.on
 
 socket.on("update-messages", (messages) => {
   let chatContainer = document.getElementById("chat-container")
@@ -35,11 +31,9 @@ socket.on("update-messages", (messages) => {
   }
 })
 
-// Event listeners
-
 messageInput.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
-    sendMsgBtn.click(); // Al apretar enter, se esta realizando un "click" sobre ese boton
+    sendMsgBtn.click();
   }
 })
 

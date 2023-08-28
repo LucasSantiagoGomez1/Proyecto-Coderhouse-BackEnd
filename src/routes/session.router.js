@@ -4,8 +4,6 @@ import sessionController from "../controllers/session.controller.js";
 
 const router = Router()
 
-// local routes
-
 router.post(
   '/register',
   passport.authenticate('register', {session: false, failureRedirect: 'registerFail'}),
@@ -26,8 +24,6 @@ router.post('/logout', sessionController.logout)
 
 router.post('/resetPassword', sessionController.resetPassword)
 
-// github routes
-
 router.get(
   '/github',
   passport.authenticate('github', { scope: 'user:email', session: false}),
@@ -39,8 +35,6 @@ router.get(
   passport.authenticate('github', {failureRedirect: '/login', session: false}),
   sessionController.githubcallback
 );
-
-// current
 
 router.get(
   '/current',

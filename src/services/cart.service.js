@@ -1,4 +1,4 @@
-import CartManager from "../daos/mongodb/managers/CartManager.class.js";
+import CartManager from "../daos/mongodb/managers/CartMongo.dao.js";
 import ProductService from "./products.service.js"
 
 export default class CartService {
@@ -62,7 +62,7 @@ export default class CartService {
     let products = await this.cartDao.getAllProductsFromCart(cartId)
 
     for (let prod of products) {
-      
+
       let product = await this.productService.getProductById(prod.product._id)
 
       if (prod.quantity > product.stock) {
@@ -72,7 +72,6 @@ export default class CartService {
         continue
       }
 
-      
       await this.productService.updateProduct(product._id, {stock: product.stock - prod.quantity})
 
       productsBought.push({productId: product._id, quantity: prod.quantity})

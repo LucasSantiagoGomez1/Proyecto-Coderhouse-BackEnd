@@ -16,7 +16,7 @@ export default class ProductManager {
       let data = await fs.promises.readFile(this.path, "utf-8");
       products = JSON.parse(data)
 
-      products = products.map((product) => this.#rebuildProduct(product)) // Se reconstruyen los productos como instancia de la clase Product
+      products = products.map((product) => this.#rebuildProduct(product))
     }
 
     return products
@@ -32,8 +32,6 @@ export default class ProductManager {
   async addProduct({title, description, price, thumbnails = null, code, stock, category, status}) {
     let products = await this.#loadProductsFromPath();
 
-    // Verificamos si se puede agregar el producto
-
     let hayCampoVacio = [title, description, price, code, stock, category, status].some(campo => campo === null || campo === "" || campo === undefined)
 
     if (hayCampoVacio) {
@@ -46,15 +44,12 @@ export default class ProductManager {
       return
     }
 
-    // Se agrega el producto
 
     let newProduct = new Product(title, description, price, thumbnails, code, stock, category, status);
 
     newProduct.id = uuidV4()
 
     products.push(newProduct)
-
-    // Se reescriben los productos en el archivo (con el nuevo producto)
 
     await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'))
   }
@@ -95,8 +90,6 @@ export default class ProductManager {
       }
       return product
     })
-
-    // Se reescriben los productos en el archivo (con el producto actualizado)
 
     await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'))
   }

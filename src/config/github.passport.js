@@ -8,8 +8,6 @@ let userService = new UserService()
 
 const initializePassportGithub = () => {
 
-  // Strategies
-
   passport.use(
     "github",
     new GithubStrategy(
@@ -23,7 +21,6 @@ const initializePassportGithub = () => {
         
         if (!user) {
           let newUser = {
-            // Github no nos da "last_name", "age", y "password" (por ello se hardcodean los datos)
             first_name: profile._json.name,
             last_name: "test-lastname", 
             email: profile._json.email,
@@ -36,7 +33,7 @@ const initializePassportGithub = () => {
           done(null, result);
         } 
         else {
-          done(null, user); // Quiza deberia mandar el user (el profe no lo hizo, lo dejo asi)
+          done(null, user);
         }
       }
     )

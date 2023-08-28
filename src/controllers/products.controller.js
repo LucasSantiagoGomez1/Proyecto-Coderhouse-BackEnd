@@ -2,7 +2,7 @@ import ProductService from '../services/products.service.js'
 
 let productService = new ProductService
 
-const getProducts = async (req, res) => {
+const getProducts = async (req, res, next) => {
   try {
     let limit = req.query.limit
     let page = req.query.page
@@ -28,24 +28,24 @@ const getProducts = async (req, res) => {
     res.send(response)
   }
   catch (error) {
-    res.status(400).send({status: "error", details: "There was an error"})
+    return next(error)
   }
 }
 
-const getProductById = async (req, res) => {
-  let id = req.params.pid
+const getProductById = async (req, res, next) => {
+  try {
+    let id = req.params.pid
 
-  let product = await productService.getProductById(id)
+    let product = await productService.getProductById(id)
 
-  if (!product) {
-    res.send("No se encontró el producto")
-    return
+    res.send(product)
   }
-
-  res.send(product)
+  catch(error) {
+    return next(error)
+  }
 }
 
-const addProduct = async (req, res) => {
+const addProduct = async (req, res, next) => {
   try {
     let newProduct = req.body
 
@@ -57,7 +57,7 @@ const addProduct = async (req, res) => {
     res.send({status: "success"})
   }
   catch(error) {
-    res.status(400).send({status: "failure", details: error.message})
+    return next(error)
   }
 }
 
