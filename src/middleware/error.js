@@ -1,6 +1,9 @@
 import { ErrorEnum } from "../services/error/enum.js";
 
 export const errorMiddleware = (error, req, res, next) => {
+
+  req.logger.error(`Error name: ${error.name}`)
+
   switch (error.code) {
     case ErrorEnum.ROUTING_ERROR:
       return res.status(400).send({ status: "error", error: error.name, cause: error.cause });

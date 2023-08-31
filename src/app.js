@@ -1,4 +1,5 @@
 import express from 'express'
+
 import handlebars from 'express-handlebars'
 
 import __dirname from './utils.js'
@@ -28,6 +29,7 @@ import { initializePassportJWT } from './config/jwt.passport.js'
 
 import { generateProductsMock } from './mocks/products.mock.js'
 import { errorMiddleware } from './middlewares/error.js'
+import { addLogger } from './logger.js'
 
 // initial configuration
 
@@ -67,6 +69,10 @@ initializePassportGithub()
 initializePassportLocal()
 initializePassportJWT()
 app.use(passport.initialize())
+
+// logger
+
+app.use(addLogger)
 
 // server start and socket io
 
@@ -133,5 +139,16 @@ app.use("/api/carts", routerCarts);
 app.use('/api/sessions', routerSession);
 
 app.get("/mockingproducts", async (req, res) => res.send(generateProductsMock(100)))
+
+app.get("/loggerTest", async (req, res) => {
+  req.logger.fatal("Test de Logger - Level: 'fatal'")
+  req.logger.error("Test de Logger - Level: 'error'")
+  req.logger.warning("Test de Logger - Level: 'warning'")
+  req.logger.info("Test de Logger - Level: 'info'")
+  req.logger.http("Test de Logger - Level: 'http'")
+  req.logger.debug("Test de Logger - Level: 'debug'")
+
+  res.send("Se termino de probar el logger exitosamente")
+})
 
 app.use(errorMiddleware)

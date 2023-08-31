@@ -44,7 +44,6 @@ export default class ProductManager {
       return
     }
 
-
     let newProduct = new Product(title, description, price, thumbnails, code, stock, category, status);
 
     newProduct.id = uuidV4()
