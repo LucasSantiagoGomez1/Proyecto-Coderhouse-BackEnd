@@ -66,6 +66,10 @@ const resetPassword = async (req, res) => {
   res.render('resetPassword');
 }
 
+const requestResetPassword = async (req, res) => {
+  res.render('requestResetPassword')
+}
+
 export default {
   home,
   realTimeProducts,
@@ -74,5 +78,6 @@ export default {
   cart,
   login,
   register,
-  resetPassword
+  resetPassword,
+  requestResetPassword
 }

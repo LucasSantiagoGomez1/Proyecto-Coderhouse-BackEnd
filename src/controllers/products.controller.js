@@ -1,4 +1,5 @@
 import ProductService from '../services/products.service.js'
+import config from "../config.js"
 
 let productService = new ProductService
 
@@ -49,6 +50,10 @@ const addProduct = async (req, res, next) => {
   try {
     let newProduct = req.body
 
+    if (req.user.email != config.ADMIN_NAME) {
+      newProduct.owner = req.user.email
+    }
+
     await productService.addProduct(newProduct)
     
     const products = await productService.getProducts()
@@ -61,24 +66,49 @@ const addProduct = async (req, res, next) => {
   }
 }
 
-const updateProduct = async (req, res) => {
-  let id = req.params.pid
-  let newProduct = req.body
+const updateProduct = async (req, res, next) => {
+  try {
+    let id = req.params.pid
 
-  await productService.updateProduct(id, newProduct)
+    let product = await productService.getProductById(id)
+    
+    if ( !(req.user.role === "admin" || product.owner === req.user.email) ) {
+      return res.status(403).
+      send({ status: "failure", details: "You don't have access. You are not the product owner" })
+    }
 
-  res.send({status: "success"})
+    let newProduct = req.body
+
+    await productService.updateProduct(id, newProduct)
+
+    res.send({status: "success"})
+  }
+  catch (error) {
+    return next(error)
+  }
 }
 
-const deleteProduct = async (req, res) => {
-  let id = req.params.pid
-  
-  await productService.deleteProduct(id)
+const deleteProduct = async (req, res, next) => {
+  try {
+    let id = req.params.pid
 
-  const products = await productService.getProducts()
-  req.socketServer.sockets.emit('update-products', products)
+    let product = await productService.getProductById(id)
+    
+    if ( !(req.user.role === "admin" || product.owner === req.user.email) ) {
+      return res.status(403).
+      send({ status: "failure", details: "You don't have access. You are not the product owner" })
+    }
 
-  res.send({status: "success"})
+    await productService.deleteProduct(id)
+
+    const products = await productService.getProducts()
+    req.socketServer.sockets.emit('update-products', products)
+
+    res.send({status: "success"})
+  }
+  catch(error) {
+    return next(error)
+  }
 }
 
 export default {

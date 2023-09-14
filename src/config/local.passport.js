@@ -52,7 +52,7 @@ const initializePassportLocal = () => {
 
   passport.use("register", new LocalStrategy(
     {passReqToCallback: true, usernameField: 'email'}, async (req, username, password, done) => {
-      const {first_name, last_name, email, age} = req.body;
+      const {first_name, last_name, email, age, role} = req.body;
 
       try {
         let user = await userService.findUser(email);
@@ -66,6 +66,7 @@ const initializePassportLocal = () => {
           last_name,
           email,
           age,
+          role,
           password: createHash(password)
         };
 

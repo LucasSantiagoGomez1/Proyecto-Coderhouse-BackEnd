@@ -25,4 +25,14 @@ export default class UserService {
   async updatePassword(email, newPassword) {
     await this.userDao.updatePassword(email, newPassword)
   }
+
+  async findUserById(id) {
+    let user = await this.userDao.findUserById(id)
+
+    return user
+  }
+
+  async updateUserRole(id, newRole) {
+    await this.userDao.updateUserRole(id, newRole)
+  }
 }

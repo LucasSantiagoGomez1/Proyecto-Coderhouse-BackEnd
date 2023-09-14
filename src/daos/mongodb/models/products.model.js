@@ -36,6 +36,11 @@ const ProductSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true
+  },
+  owner: {
+    type: String,
+    ref: 'users',
+    default: "admin"
   }
 })
 

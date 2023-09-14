@@ -1,7 +1,7 @@
 import { Router } from "express"
 import productsController from "../controllers/products.controller.js"
 import passport from "passport"
-import { adminRoleAuth } from "./middlewares/roles.middlewares.js"
+import { adminRoleAuth, multipleRolesAuth } from "./middlewares/roles.middlewares.js"
 
 const router = Router()
 
@@ -12,21 +12,21 @@ router.get('/:pid', productsController.getProductById)
 router.post(
   '/',
   passport.authenticate('jwt', {session: false}),
-  adminRoleAuth,
+  multipleRolesAuth(["admin", "premium"]),
   productsController.addProduct
 )
 
 router.put(
   '/:pid',
   passport.authenticate('jwt', {session: false}),
-  adminRoleAuth,
+  multipleRolesAuth(["admin", "premium"]),
   productsController.updateProduct
 )
 
 router.delete(
   '/:pid',
   passport.authenticate('jwt', {session: false}),
-  adminRoleAuth,
+  multipleRolesAuth(["admin", "premium"]),
   productsController.deleteProduct
 )
 

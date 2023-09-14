@@ -39,4 +39,14 @@ export default class UserManager {
     await userModel.updateOne({_id: user._id}, {$set: {password: newPassword}});
   }
   
+  async updateUserRole(id, newRole) {
+    let user = await userModel.findOne({_id: id})
+
+    if (!user) {
+      throw new Error("User wasn't found")
+    }
+
+    await userModel.updateOne({_id: user._id}, {$set: {role: newRole}});
+  }
+
 }

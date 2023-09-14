@@ -3,7 +3,7 @@ import __dirname from "../utils.js";
 import cartsController from "../controllers/carts.controller.js";
 import passport from "passport";
 import { verifyCartAccess } from "./middlewares/carts.middleware.js";
-import { userRoleAuth } from "./middlewares/roles.middlewares.js";
+import { multipleRolesAuth, userRoleAuth } from "./middlewares/roles.middlewares.js";
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.post('/', cartsController.createCart)
 router.post(
   '/:cid/product/:pid',
   passport.authenticate('jwt', {session: false}),
-  userRoleAuth,
+  multipleRolesAuth(["user", "premium"]),
   verifyCartAccess,
   cartsController.addProductToCart
 )
