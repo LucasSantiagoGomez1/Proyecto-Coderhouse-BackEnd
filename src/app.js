@@ -31,6 +31,9 @@ import { generateProductsMock } from './mocks/products.mock.js'
 import { errorMiddleware } from './middlewares/error.js'
 import { addLogger } from './logger.js'
 
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUiExpress from 'swagger-ui-express'
+
 // initial configuration
 
 const app = express();
@@ -73,6 +76,22 @@ app.use(passport.initialize())
 // logger
 
 app.use(addLogger)
+
+// swagger
+
+const swaggerOptions = {
+  definition: {
+      openapi: '3.0.1',
+      info: {
+          title: 'Proyecto de Backend - Coderhouse',
+          description: 'Documentación del proyecto de Backend - Coderhouse'
+      },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/apidocs',swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 // server start and socket io
 
