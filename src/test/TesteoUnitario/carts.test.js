@@ -2,14 +2,17 @@ import chai from "chai";
 import CartService from "../../src/services/cart.service.js";
 import mongoose from "mongoose";
 
-describe("Unit testing Carts", function() {
 
+this.connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority');
+
+
+describe("Unit testing Carts", function() {
   this.timeout(10000)
 
   before(async function() {
     this.timeout(10000)
 
-    this.connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority');
+    await mongoose.connection.collections.carts.drop()
     this.cartService = new CartService()
 
     console.log("Se ejecuta el before antes de los tests unitarios de carritos")
@@ -18,12 +21,6 @@ describe("Unit testing Carts", function() {
   after(async function() {
     await mongoose.disconnect()
     console.log("Se cerro la conexion en Carts Test")
-  })
-
-  afterEach(async function() {
-    for (let collection of this.collections) {
-      await collection.deleteMany({})
-    }
   })
 
   // Testeos Unitarios de los Carritos

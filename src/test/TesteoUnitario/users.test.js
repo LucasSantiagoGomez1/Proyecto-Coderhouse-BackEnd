@@ -1,17 +1,17 @@
-import chai from "chai";
-import UserService from "../../src/services/user.service.js";
 import mongoose from "mongoose";
+import UserService from "../../src/services/user.service.js";
+import chai from "chai";
 
-describe('Unit testing Sessions', function() {
-  this.timeout(10000) 
+const connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority');
+
+describe('Unit testing Sessions', ()=>{
+  this.timeout(10000)
 
   before(async function() {
-    this.timeout(10000) 
+      this.timeout(10000)
 
-    this.connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority');
-    this.userService = new UserService()
-
-    console.log("Se ejecuta el before antes de los tests unitarios de users")
+      await mongoose.connection.collections.users.drop()
+      this.userService = new UserService()
   })
 
   after(async function() {
@@ -19,14 +19,8 @@ describe('Unit testing Sessions', function() {
     console.log("Se cerro la conexion en Users Test")
   })
 
-  afterEach(async function() {
-    for (let collection of this.collections) {
-      await collection.deleteMany({})
-    }
-  })
-
-  // Testeos unitarios de los Usuarios
-
+    // Testeos unitarios de usuarios
+  
   it('Se agrega un usuario', async function() {
     let mockUser = {
       first_name: "Pepe",

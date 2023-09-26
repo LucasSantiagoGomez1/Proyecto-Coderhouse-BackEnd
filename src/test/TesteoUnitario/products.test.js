@@ -2,6 +2,8 @@ import chai from "chai";
 import ProductService from "../../src/services/products.service.js";
 import mongoose from "mongoose";
 
+this.connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority');
+
 describe("Unit Testing Products", function() {
 
   this.timeout(10000)
@@ -9,7 +11,7 @@ describe("Unit Testing Products", function() {
   before(async function() {
     this.timeout(10000)
 
-    this.connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority');
+    await mongoose.connection.collections.products.drop()
     this.productService = new ProductService()
 
     console.log("Se ejecuta el before antes de los tests unitarios de productos")
@@ -18,12 +20,6 @@ describe("Unit Testing Products", function() {
   after(async function() {
     await mongoose.disconnect()
     console.log("Se cerro la conexion en Products Test")
-  })
-
-  afterEach(async function() {
-    for (let collection of this.collections) {
-      await collection.deleteMany({})
-    }
   })
 
   // Testeos unitarios de los Productos
