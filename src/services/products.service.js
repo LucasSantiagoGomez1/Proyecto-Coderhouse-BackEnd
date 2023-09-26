@@ -39,6 +39,20 @@ export default class ProductService {
     })
 
   }
+
+  async getProductByCode(productCode) {
+    let products = await this.productDao.getProducts()
+
+    for (let prod of products.docs) {
+      if (prod.code.toString() === productCode.toString()) {
+        let product = await this.productDao.getProductByCode(productCode)
+
+        return product
+      }
+    }
+    
+    return false
+  }
   
   async addProduct(newProduct) {
     let products = await this.productDao.getProducts()

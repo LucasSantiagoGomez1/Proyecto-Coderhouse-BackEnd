@@ -28,7 +28,9 @@ import initializePassportLocal from './config/local.passport.js'
 import { initializePassportJWT } from './config/jwt.passport.js'
 
 import { generateProductsMock } from './mocks/products.mock.js'
+
 import { errorMiddleware } from './middlewares/error.js'
+
 import { addLogger } from './logger.js'
 
 import swaggerJSDoc from 'swagger-jsdoc'
