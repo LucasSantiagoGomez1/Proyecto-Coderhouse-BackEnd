@@ -1,5 +1,5 @@
 import chai from "chai";
-import CartService from "../../src/services/cart.service.js";
+import CartService from "../../services/cart.service.js";
 import mongoose from "mongoose";
 
 

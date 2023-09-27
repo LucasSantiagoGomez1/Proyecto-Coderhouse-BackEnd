@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import UserService from "../../src/services/user.service.js";
+import UserService from "../../services/user.service.js";
 import chai from "chai";
 
 const connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority');

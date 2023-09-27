@@ -1,5 +1,5 @@
 import chai from "chai";
-import ProductService from "../../src/services/products.service.js";
+import ProductService from "../../services/products.service.js";
 import mongoose from "mongoose";
 
 this.connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority');
