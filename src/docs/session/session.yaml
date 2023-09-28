@@ -1,4 +1,4 @@
-aths:
+paths:
 
   /api/sessions/login:
     post:
