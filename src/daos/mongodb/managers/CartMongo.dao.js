@@ -83,4 +83,7 @@ export default class CartManager {
     return cart.products
   }
 
+  async deleteCart(id) {
+    await cartsModel.deleteOne({ _id: id })
+  }
 }

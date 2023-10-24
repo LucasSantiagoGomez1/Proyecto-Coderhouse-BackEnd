@@ -37,6 +37,5 @@ const devLogger = winston.createLogger({
 
 export const addLogger = (req, res, next) => {
   req.logger = config.ENVIRONMENT === "PRODUCTION" ? prodLogger : devLogger;
-  req.logger.http(`${req.method} en ${req.url}`)
   next()
 }

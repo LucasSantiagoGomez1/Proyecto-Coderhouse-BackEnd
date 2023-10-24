@@ -22,6 +22,10 @@ const login = async (req, res) => {
     return res.status(400).send({status: "error", details: "Invalid credentials"})
   }
 
+  if (user.role !== "admin") {
+    await userService.updateUserLastConnection(user.id)
+  }
+
   let token = jwt.sign(req.user, config.JWT_SECRET, {expiresIn: '24h'})
 
   return res.cookie("authToken", token, {httpOnly: true}).send({status: "success"})
@@ -32,6 +36,12 @@ const loginFail = async (req, res) => {
 }
 
 const logout = async (req, res) => {
+  const user = req.user
+
+  if (user.role !== "admin") {
+    await userService.updateUserLastConnection(user.id)
+  }
+  
   res.clearCookie('authToken')
   res.send({status: "sucess"})
 }
@@ -122,30 +132,6 @@ const current = async (req, res) => {
   res.send(userDto);
 }
 
-const changeRole = async (req, res) => {
-  try {
-    let userId = req.params.uid
-
-    let user = await userService.findUserById(userId)
-
-    switch(user.role) {
-      case "user":
-        await userService.updateUserRole(userId, "premium")
-        return res.send({status: "success", message: "User role upgraded to premium"});
-      case "premium":
-        await userService.updateUserRole(userId, "user")
-        return res.send({status: "success", message: "User role degraded to user"});
-      default:
-        return res.status(400).
-        send({status: "failure", details: "Invalid role. Role can't be updated"})
-    }
-    
-  }
-  catch (error) {
-    return res.status(404).send({status: "error", error: error.message});
-  }
-}
-
 export default {
   register,
   registerFail,
@@ -156,6 +142,5 @@ export default {
   requestResetPassword,
   github,
   githubcallback,
-  current,
-  changeRole
+  current
 }

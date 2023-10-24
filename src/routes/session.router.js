@@ -21,7 +21,11 @@ router.post(
 
 router.get('/loginFail', sessionController.loginFail)
 
-router.post('/logout', sessionController.logout)
+router.post(
+  '/logout',
+  passport.authenticate('jwt', { session: false }),
+  sessionController.logout
+)
 
 router.post('/resetPassword', sessionController.resetPassword)
 
@@ -44,11 +48,5 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   sessionController.current
 );
-
-router.post(
-  '/premium/:uid',
-  passport.authenticate('jwt', { session: false }),
-  sessionController.changeRole
-)
 
 export default router

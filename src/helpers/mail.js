@@ -24,4 +24,15 @@ export default class Mail {
 
     return result
   }
+
+  sendByMail = async (mail, subject, html) => {
+    const result = await this.transport.sendMail({
+      from: config.MAIL_APP,
+      to: mail,
+      subject,
+      html
+    })
+
+    return result
+  }
 }

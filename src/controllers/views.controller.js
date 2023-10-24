@@ -1,4 +1,5 @@
 import ViewService from "../services/views.service.js";
+import ViewUserDTO from "./DTO/viewUser.dto.js"
 
 let viewService = new ViewService()
 
@@ -43,15 +44,20 @@ const products = async (req, res) => {
 }
 
 const cart = async (req, res) => {
-  let cartId = req.params.cid
+  try {
+    let cartId = req.params.cid
 
-  let cartProducts = await viewService.getAllProductsFromCart(cartId)
-
-  res.render('cart', {
-    title: "Cart",
-    cartProducts: cartProducts,
-    cartId: cartId
-  })
+    let cartProducts = await viewService.getAllProductsFromCart(cartId)
+  
+    res.render('cart', {
+      title: "Cart",
+      cartProducts: cartProducts,
+      cartId: cartId
+    })
+  }
+  catch (err) {
+    return res.status(404).send({status: "error", error: err.message});
+  }
 }
 
 const login = async (req, res) => {
@@ -70,6 +76,56 @@ const requestResetPassword = async (req, res) => {
   res.render('requestResetPassword')
 }
 
+const user = async (req, res, next) => {
+  try {
+    let userId = req.params.uid
+
+    let user = await viewService.getUserById(userId)
+  
+    res.render('user', {
+      title: "User",
+      user: new ViewUserDTO(user),
+      userId: userId
+    })
+  }
+  catch (err) {
+    return res.status(404).send({status: "error", error: err.message});
+  }
+}
+
+const allUsers = async (req, res, next) => {
+  try {
+    let users = await viewService.getAllUsers()
+  
+    res.render('users', {
+      title: "Users",
+      users: users
+    })
+  }
+  catch (err) {
+    return res.status(404).send({status: "error", error: err.message});
+  }
+}
+
+const ticket = async (req, res, next) => {
+  try {
+    let ticketId = req.params.tid
+
+    let ticket = await viewService.getTicket(ticketId)
+
+    let dataProductsBought = await viewService.getDataProductsBought(ticketId)
+
+    res.render('ticket', {
+      title: "Ticket",
+      ticket: ticket,
+      dataProductsBought: dataProductsBought
+    })
+  }
+  catch (err) {
+    return res.status(404).send({status: "error", error: err.message});
+  }
+}
+
 export default {
   home,
   realTimeProducts,
@@ -79,5 +135,8 @@ export default {
   login,
   register,
   resetPassword,
-  requestResetPassword
+  requestResetPassword,
+  user,
+  allUsers,
+  ticket
 }

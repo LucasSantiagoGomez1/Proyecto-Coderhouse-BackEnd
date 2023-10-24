@@ -32,6 +32,23 @@ const schema = new mongoose.Schema({
       enum: ["user", "admin", "premium"],
       default: "user",
       required: true
+    },
+    documents: {
+      type: [
+        {
+          name: {
+            type: String
+          },
+          reference: {
+            type: String
+          }
+        }
+      ],
+      default: []
+    },
+    last_connection: {
+      type: String,
+      default: Date.now()
     }
 })
 

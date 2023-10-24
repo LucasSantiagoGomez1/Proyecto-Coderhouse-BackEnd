@@ -11,6 +11,7 @@ import routerCarts from './routes/carts.router.js'
 import routerMessages from './routes/messages.router.js'
 import routerViews from './routes/views.router.js'
 import routerSession from './routes/session.router.js'
+import routerUsers from './routes/users.router.js'
 
 import { Server } from "socket.io";
 
@@ -158,6 +159,7 @@ app.use("/api/messages", routerMessages);
 app.use("/api/products", routerProducts);
 app.use("/api/carts", routerCarts);
 app.use('/api/sessions', routerSession);
+app.use("/api/users", routerUsers)
 
 app.get("/mockingproducts", async (req, res) => res.send(generateProductsMock(100)))
 

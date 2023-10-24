@@ -32,7 +32,7 @@ router.put('/:cid/products/:pid', cartsController.updateProductQuantityFromCart)
 router.post(
   '/:cid/purchase',
   passport.authenticate('jwt', {session: false}),
-  userRoleAuth,
+  multipleRolesAuth(["user", "premium"]),
   verifyCartAccess,
   cartsController.purchaseProductsFromCart
 )

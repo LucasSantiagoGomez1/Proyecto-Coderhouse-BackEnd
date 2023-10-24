@@ -11,4 +11,10 @@ export default class TicketService {
 
     return newTicket
   }
+
+  async getTicketById(id) {
+    let ticket = await this.ticketDao.getTicketById(id)
+
+    return ticket
+  }
 }

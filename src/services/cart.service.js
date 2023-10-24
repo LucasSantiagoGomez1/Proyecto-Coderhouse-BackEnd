@@ -62,7 +62,6 @@ export default class CartService {
     let products = await this.cartDao.getAllProductsFromCart(cartId)
 
     for (let prod of products) {
-
       let product = await this.productService.getProductById(prod.product._id)
 
       if (prod.quantity > product.stock) {
@@ -88,4 +87,7 @@ export default class CartService {
     }
   }
 
+  async deleteCart(cartId) {
+    await this.cartDao.deleteCart(cartId)
+  }
 }

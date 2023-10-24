@@ -94,27 +94,32 @@ const updateProductQuantityFromCart = async (req, res) => {
 }
 
 const purchaseProductsFromCart = async (req, res) => {
-  let code = uuidV4()
+  try {
+    let code = uuidV4()
 
-  let purchaseData = await cartService.purchaseAllProductsFromCart(req.user.cart)
+    let purchaseData = await cartService.purchaseAllProductsFromCart(req.user.cart)
 
-  await cartService.deleteProductsFromCart(req.user.cart, purchaseData.productsBought) 
+    await cartService.deleteProductsFromCart(req.user.cart, purchaseData.productsBought) 
 
-  let ticketData = {
-    code: code,
-    products: purchaseData.productsBought,
-    amount: purchaseData.total,
-    purchaser: req.user.email
+    let ticketData = {
+      code: code,
+      products: purchaseData.productsBought,
+      amount: purchaseData.total,
+      purchaser: req.user.email
+    }
+
+    let ticket = await ticketService.createTicket(ticketData)
+
+    let payload = {
+      ticket,
+      productsUnableToPurchase: purchaseData.productsNotBought
+    }
+
+    res.send({status: "success", payload: payload})
   }
-
-  let ticket = await ticketService.createTicket(ticketData)
-
-  let payload = {
-    ticket,
-    productsUnableToPurchase: purchaseData.productsNotBought
+  catch (error) {
+    res.status(400).send({status: "failure", details: error.message})
   }
-
-  res.send({status: "success", payload: payload})
 }
 
 export default {

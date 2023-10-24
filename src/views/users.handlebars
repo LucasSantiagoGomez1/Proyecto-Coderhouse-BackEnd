@@ -1,0 +1,17 @@
+<h2><b>Usuarios:</b></h2>
+  {{#each users}}
+    <div style="border: 1px solid #000; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem">
+      <p><b> Nombre: </b> {{this.first_name}} </p>
+      <p><b> Mail: </b> {{this.email}} </p>
+      <button id={{this._id}} onclick="redirectToUserDetails(this)">Ver más</button>
+    </div>
+  {{/each}}
+  <a href="/products"><button>Volver a productos</button></a>
+
+<script>
+  function redirectToUserDetails(btn) {
+    let userId = btn.id
+    
+    window.location.replace(`/users/${userId}`)
+  }
+</script>

@@ -1,0 +1,14 @@
+<h1>Ticket</h1>
+<b>Código del ticket: </b> {{ticket.code}} <br><br>
+<b>Productos: </b> <br> <br>
+{{#each dataProductsBought}}
+  <div style="border: 1px solid #000; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem">
+    <p>Producto: {{this.product.title}}</p>
+    <p>Cantidad: {{this.quantity}}</p>
+    <p>Precio unitario: ${{this.product.price}} </p>
+    <p>Subtotal: ${{this.subtotal}} </p>
+  </div>
+{{/each}}
+<b>Total: </b> ${{ticket.amount}} <br><br>
+<b>Mail del comprador: </b> {{ticket.purchaser}} <br><br>
+<a href="/products"><button>Volver a productos</button></a>
