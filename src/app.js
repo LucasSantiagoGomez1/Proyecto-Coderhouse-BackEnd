@@ -62,7 +62,7 @@ app.use(cookieParser())
 
 app.use(
   session({
-    store: new MongoStore({ mongoUrl: "mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority" }),
+    store: new MongoStore({ mongoUrl: config.MONGO_URL}),
     secret: "mongoSecret",
     resave: true,
     saveUninitialized: false,

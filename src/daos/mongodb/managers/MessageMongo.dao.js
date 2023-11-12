@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import { messageModel } from "../models/messages.model.js";
+import config from "../../../config.js";
 
 export default class MessageManager {
-  connection = mongoose.connect('mongodb+srv://LucasGomez:Patabilla100@cluster0.c1sjpqg.mongodb.net/?retryWrites=true&w=majority')
+  connection = mongoose.connect(config.MONGO_URL)
   
   async getMessages() {
     let result = await messageModel.find({})
